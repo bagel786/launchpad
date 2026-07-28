@@ -1,0 +1,462 @@
+/* ==========================================================================
+   LaunchPad Consulting — the work order
+   Flat process inks on carbonless stock. No radius, no shadow, no gradient
+   except the perforation repeat. See DESIGN.md.
+   ========================================================================== */
+
+@font-face{font-family:"Archivo Black";src:url("assets/fonts/archivo-black.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Archivo Narrow";src:url("assets/fonts/archivo-narrow-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url("assets/fonts/courier-prime-700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+
+:root{
+  /* inks */
+  --ink-blue:#0770cc;
+  --ink-blue-deep:#064a87;
+  --ink-black:#14171a;
+  --ink-red:#c8322b;
+  /* stamp inks for the tinted stocks — the bright red and press blue drop
+     below 4.5:1 on canary and pink, so the darker mixes carry those parts */
+  --ink-red-deep:#9e2119;
+  --ink-blue-onstock:#064a87;
+  /* stocks */
+  --stock-bond:#f4f4f0;
+  --stock-canary:#f2d64b;
+  --stock-pink:#f0b8bd;
+  --stock-manila:#d9cfae;
+
+  --rule:1px solid var(--ink-blue);
+  --rule-thick:2px solid var(--ink-blue);
+
+  --display:"Archivo Black",Impact,"Haettenschweiler",sans-serif;
+  --label:"Archivo Narrow","Arial Narrow",Arial,sans-serif;
+  --data:"Courier Prime","Courier New",Courier,monospace;
+
+  --gap:clamp(1.25rem,3.5vw,2.75rem);
+  --pad:clamp(1.25rem,5vw,4.5rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--stock-bond);
+  color:var(--ink-black);
+  font-family:var(--data);
+  font-size:clamp(1rem,.96rem + .18vw,1.0625rem);
+  line-height:1.62;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+ul,ol{margin:0;padding:0;list-style:none}
+h1,h2,h3,p{margin:0}
+
+/* nothing rounds, nothing floats */
+*{border-radius:0}
+
+.wrap{max-width:78rem;margin-inline:auto;padding-inline:var(--pad)}
+
+.skip{
+  position:absolute;left:.5rem;top:-4rem;z-index:100;
+  background:var(--ink-red);color:#fff;padding:.7rem 1.1rem;
+  font-family:var(--label);text-transform:uppercase;letter-spacing:.12em;
+  font-size:.8rem;text-decoration:none;transition:top .12s;
+}
+.skip:focus{top:.5rem}
+
+/* --------------------------------------------------------------- plates */
+.plate{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--label);font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;
+  font-size:.6875rem;line-height:1;
+  padding:.45rem .7rem;
+  border:var(--rule);
+  color:var(--ink-blue);
+  background:var(--stock-bond);
+}
+.plate i{
+  font-style:normal;display:inline-grid;place-items:center;
+  width:1.15em;height:1.15em;border:1px solid currentColor;border-radius:50%;
+  font-size:.9em;padding-top:.05em;
+}
+.plate--onblue{color:var(--stock-bond);border-color:rgba(244,244,240,.55);background:transparent}
+
+/* --------------------------------------------------------------- type */
+.display{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(2.1rem,1rem + 5.4vw,5rem);
+  line-height:.98;letter-spacing:-.03em;
+  text-transform:uppercase;
+  text-wrap:balance;
+}
+.display--sm{font-size:clamp(1.9rem,1rem + 4vw,3.6rem)}
+/* carbon misregistration: the second and third copies printed a hair off the
+   first. Flat hard offsets, no blur — this is a press artefact, not elevation. */
+.display--carbon{
+  text-shadow:
+     3px 3px 0 var(--stock-canary),
+     6px 6px 0 var(--stock-pink);
+}
+/* the offsets scale down with the type, or they crowd the letterforms */
+@media (max-width:560px){.display--carbon{text-shadow:1.5px 1.5px 0 var(--stock-canary),3px 3px 0 var(--stock-pink)}}
+
+.heading{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(1.35rem,.95rem + 1.7vw,2.25rem);
+  line-height:1.08;letter-spacing:-.02em;
+  text-wrap:balance;
+  max-width:22ch;
+}
+
+.lede{font-size:clamp(1.02rem,.95rem + .45vw,1.25rem);line-height:1.55;max-width:56ch}
+.fineprint{font-size:.8125rem;line-height:1.5;opacity:.78;max-width:52ch}
+
+/* --------------------------------------------------------------- parts */
+.part{padding-block:clamp(2.75rem,7vw,5.5rem)}
+.part--bond{background:var(--stock-bond)}
+.part--blue{background:var(--ink-blue);color:var(--stock-bond)}
+.part--deep{background:var(--ink-blue-deep);color:var(--stock-bond)}
+.part--canary{background:var(--stock-canary)}
+.part--pink{background:var(--stock-pink)}
+.part--rule{border-top:var(--rule)}
+
+.part--canary .plate,
+.part--pink .plate{background:transparent;border-color:var(--ink-black);color:var(--ink-black)}
+
+/* the tear line between parts */
+.perf{
+  height:14px;
+  background:
+    radial-gradient(circle at 7px 7px, var(--stock-bond) 2.6px, transparent 2.8px) 0 0/14px 14px,
+    var(--ink-blue);
+  border-block:var(--rule);
+}
+
+/* --------------------------------------------------------------- masthead */
+.masthead{position:sticky;top:0;z-index:50;background:var(--ink-blue);color:var(--stock-bond)}
+.masthead__bar{
+  display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
+  max-width:78rem;margin-inline:auto;padding:.7rem var(--pad);
+}
+.masthead__mark{display:flex;align-items:center;gap:.65rem;text-decoration:none}
+.masthead__mark img{width:34px;height:34px;background:var(--stock-bond);padding:2px;border:1px solid rgba(244,244,240,.5)}
+.masthead__name{
+  font-family:var(--display);text-transform:uppercase;
+  font-size:1rem;letter-spacing:-.01em;line-height:1;
+}
+.masthead__name span{font-family:var(--label);font-weight:600;letter-spacing:.16em;font-size:.62rem;display:block;margin-top:.28rem;opacity:.85}
+.masthead__meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.masthead__form{font-family:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:.6875rem;opacity:.85}
+
+.masthead__nav{border-top:1px solid rgba(244,244,240,.35);background:var(--ink-blue-deep)}
+.masthead__nav ul{
+  display:flex;max-width:78rem;margin-inline:auto;padding-inline:var(--pad);
+  overflow-x:auto;scrollbar-width:none;
+}
+.masthead__nav ul::-webkit-scrollbar{display:none}
+.masthead__nav a{
+  display:flex;align-items:center;gap:.45rem;white-space:nowrap;
+  padding:.6rem .95rem;text-decoration:none;
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.12em;font-size:.6875rem;
+  border-right:1px solid rgba(244,244,240,.28);
+}
+.masthead__nav li:first-child a{border-left:1px solid rgba(244,244,240,.28)}
+.masthead__nav a i{
+  font-style:normal;display:inline-grid;place-items:center;
+  width:1.35em;height:1.35em;border:1px solid currentColor;border-radius:50%;font-size:.85em;
+}
+.masthead__nav a:hover{background:var(--ink-blue)}
+
+/* the instruction line printed across the top of every carbonless pad */
+.instruct{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.1rem .35rem;
+  max-width:78rem;margin-inline:auto;padding:.42rem var(--pad);
+  background:var(--ink-black);color:var(--stock-bond);
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.16em;font-size:.625rem;line-height:1.3;
+}
+.instruct__legend{display:inline-flex;gap:.25rem;margin-left:.15rem}
+.instruct .chip{width:.62rem;height:.62rem}
+.masthead .instruct{max-width:none}
+.masthead .instruct > *{max-width:78rem}
+
+/* --------------------------------------------------------------- 1 scope */
+.scope{
+  display:grid;gap:var(--gap);margin-top:1.75rem;
+  grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+  align-items:start;
+}
+.scope__main .lede{margin-top:1.5rem}
+.actions{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2rem}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.14em;font-size:.8125rem;
+  padding:1rem 1.5rem;text-decoration:none;
+  border:var(--rule-thick);
+  transition:background .12s,color .12s,border-color .12s;
+}
+.btn--stamp{background:var(--stock-bond);color:var(--ink-blue);border-color:var(--stock-bond)}
+.btn--stamp:hover{background:var(--stock-canary);border-color:var(--stock-canary);color:var(--ink-black)}
+.btn--light{background:var(--stock-canary);border-color:var(--stock-canary);color:var(--ink-black)}
+.btn--light:hover{background:var(--stock-bond);border-color:var(--stock-bond);color:var(--ink-blue-deep)}
+.btn--ghost{background:transparent;color:var(--stock-bond);border-color:rgba(244,244,240,.6)}
+.btn--ghost:hover{border-color:var(--stock-bond);background:rgba(244,244,240,.12)}
+
+.ticket{border:1px solid rgba(244,244,240,.55)}
+.ticket__row{padding:1.15rem 1.25rem;border-bottom:1px dashed rgba(244,244,240,.5)}
+.ticket__row:last-child{border-bottom:0}
+.ticket__row--foot{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.ticket__row--foot .fineprint{margin:0}
+.ticket__row .plate{margin-bottom:.7rem}
+.ticket__row p{font-size:.9375rem;line-height:1.5}
+.ticket__row p + p{margin-top:.6rem}
+.part--blue .fineprint{opacity:.8}
+
+/* --------------------------------------------------------------- 2 services */
+.part .plate + .heading{margin-top:1.5rem}
+
+/* printed caption block on the left, line-item table on the right */
+.split{
+  display:grid;gap:var(--gap);
+  grid-template-columns:minmax(0,20rem) minmax(0,1fr);
+  align-items:start;
+}
+.split__caption{position:sticky;top:7.5rem}
+.split__caption .heading{max-width:16ch}
+.split__caption .note{margin-top:1.75rem}
+
+.lines{border-top:var(--rule)}
+.line{
+  display:grid;
+  grid-template-columns:2.4rem 3.2rem minmax(0,1fr);
+  align-items:start;gap:0 1rem;
+  padding:1.35rem 0;
+  border-bottom:var(--rule);
+}
+.line__box{
+  width:1.15rem;height:1.15rem;border:var(--rule-thick);margin-top:.32rem;
+  background:
+    linear-gradient(to bottom right,transparent calc(50% - 1px),var(--ink-blue) calc(50% - 1px),var(--ink-blue) calc(50% + 1px),transparent calc(50% + 1px)),
+    linear-gradient(to bottom left,transparent calc(50% - 1px),var(--ink-blue) calc(50% - 1px),var(--ink-blue) calc(50% + 1px),transparent calc(50% + 1px));
+}
+.line__no{
+  font-family:var(--label);font-weight:600;color:var(--ink-blue);
+  letter-spacing:.1em;font-size:.8125rem;padding-top:.42rem;
+}
+.line__body h3{
+  font-family:var(--display);font-size:1.0625rem;text-transform:uppercase;
+  letter-spacing:.005em;line-height:1.2;
+}
+.line__body p{margin-top:.5rem;max-width:64ch;font-size:.9375rem;line-height:1.6}
+
+.note{margin-top:2.25rem;font-size:.9375rem;max-width:70ch;line-height:1.7}
+.note .plate{margin-right:.6rem;transform:translateY(-.06em)}
+
+/* --------------------------------------------------------------- 3 crew */
+.crew{
+  display:grid;gap:0;margin-top:2.5rem;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  border:var(--rule);
+}
+.crew__member{border-right:var(--rule);display:flex;flex-direction:column}
+.crew__member:last-child{border-right:0}
+
+/* one-colour reproduction, as a form photo would be printed: highlights take
+   the press blue, shadows drop to black. Applied identically to all four so
+   studio portraits and phone selfies read as one set. */
+.portrait{background:var(--ink-blue);isolation:isolate;border-bottom:var(--rule)}
+.portrait img{
+  width:100%;aspect-ratio:1;object-fit:cover;
+  filter:grayscale(1) brightness(1.14) contrast(1.08);
+  mix-blend-mode:multiply;
+}
+.crew__plate{padding:1.1rem 1.15rem 1.35rem;flex:1}
+.crew__plate .plate{border:0;padding:0;background:transparent;margin-bottom:.55rem}
+.crew__plate h3{font-family:var(--display);font-size:1.0625rem;text-transform:uppercase;line-height:1.15}
+.crew__plate p{margin-top:.6rem;font-size:.875rem;line-height:1.55}
+
+.about{
+  margin-top:2.5rem;border:var(--rule);
+  padding:1.6rem clamp(1.1rem,3vw,2rem);
+  background:var(--stock-manila);
+  display:grid;gap:var(--gap);
+  grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  align-items:start;
+}
+.about .plate{border-color:var(--ink-black);color:var(--ink-black);background:transparent;margin-bottom:1rem}
+.about p{max-width:60ch}
+.about p + p{margin-top:1rem}
+
+/* the form's own spec block — ruled key/value rows */
+.spec{margin:0;border-top:1px solid rgba(20,23,26,.35)}
+.spec > div{
+  display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:1rem;
+  padding:.6rem 0;border-bottom:1px solid rgba(20,23,26,.35);
+}
+.spec dt{
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.12em;font-size:.6875rem;padding-top:.28em;
+}
+.spec dd{margin:0;font-size:.875rem;line-height:1.45}
+
+/* --------------------------------------------------------------- 4 files */
+.files{margin-top:2.5rem;border:2px solid var(--ink-black)}
+.file{
+  display:grid;
+  grid-template-columns:8rem minmax(0,1fr) 15rem;
+  gap:.35rem 1.5rem;align-items:center;
+  padding:1.25rem clamp(1rem,2.5vw,1.5rem);
+  border-bottom:1px solid var(--ink-black);
+}
+.file:last-child{border-bottom:0}
+.file .plate{grid-row:span 2;align-self:start;margin-top:.2rem}
+.file h3{font-family:var(--display);font-size:1.125rem;text-transform:uppercase;line-height:1.15}
+.file h3 a{text-decoration:none;border-bottom:2px solid var(--ink-black)}
+.file h3 a:hover{background:var(--ink-black);color:var(--stock-canary);border-color:transparent}
+.file__sector{grid-column:2;font-size:.875rem;line-height:1.45}
+.file__status{grid-column:3;grid-row:1 / span 2;justify-self:end;text-align:right}
+.file--open .fineprint{grid-column:2;font-size:.8125rem;margin-top:.15rem}
+
+/* --------------------------------------------------------------- 5 remarks */
+.remarks__intro{margin-top:1.25rem;max-width:62ch;font-size:.9375rem}
+.remarks{
+  display:grid;gap:0;margin-top:2.25rem;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  border:2px solid var(--ink-black);
+}
+.remark{padding:1.35rem;border-right:1px solid var(--ink-black)}
+.remark:last-child{border-right:0}
+.remark__field{margin:1.15rem 0 1.4rem;display:grid;gap:1.4rem}
+.remark__field span{display:block;height:1px;background:var(--ink-black);opacity:.45}
+.remark__field span:last-child{width:62%}
+.remark__sig{border-top:1px dashed var(--ink-black);padding-top:1.15rem}
+/* signature and date rules — the part the client actually fills in */
+.sigline{margin:1.25rem 0 0}
+.sigline > div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.6rem;align-items:end;margin-top:.85rem}
+.sigline dt{
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.12em;font-size:.625rem;
+}
+.sigline dd{margin:0;border-bottom:1px solid var(--ink-black);height:1.05rem;opacity:.55}
+/* the rotated stamp must stay inside its box at every column width */
+.remark__sig .stamp{font-size:.6875rem;letter-spacing:.1em;padding:.5rem .65rem;max-width:100%}
+.part--pink .note a{color:var(--ink-black)}
+
+/* --------------------------------------------------------------- 6 order */
+.order{
+  display:grid;gap:var(--gap);margin-top:2.25rem;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  align-items:start;
+}
+.order__fields{border-top:1px solid rgba(244,244,240,.45)}
+.order__fields li{
+  display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:1rem;align-items:baseline;
+  padding:1.05rem 1rem 1.05rem 0;border-bottom:1px solid rgba(244,244,240,.45);
+  font-size:.9375rem;
+}
+.order__fields .plate{flex:none;justify-self:start}
+.order__action .fineprint{margin-top:1.1rem}
+.order__action .fineprint a{color:var(--stock-canary)}
+
+/* --------------------------------------------------------------- stamps */
+.stamp{
+  display:inline-block;
+  font-family:var(--label);font-weight:600;text-transform:uppercase;
+  letter-spacing:.16em;font-size:.75rem;line-height:1;
+  padding:.55rem .8rem;
+  border:2px solid var(--ink-red);color:var(--ink-red);
+  transform:rotate(-4deg);
+  transform-origin:left center;
+}
+.stamp--blue{border-color:var(--ink-blue-onstock);color:var(--ink-blue-onstock);transform:rotate(-6deg)}
+/* canary and pink need the darker inks to clear 4.5:1 */
+.part--canary .stamp,.part--pink .stamp{border-color:var(--ink-red-deep);color:var(--ink-red-deep)}
+.part--canary .stamp--blue{border-color:var(--ink-blue-onstock);color:var(--ink-blue-onstock)}
+.stamp--light{border-color:var(--stock-bond);color:var(--stock-bond);transform:rotate(-3deg)}
+.stamp--outline{border-style:dashed;transform:rotate(-5deg);opacity:.85}
+.file__status .stamp{transform-origin:right center}
+
+.stamp--pending{opacity:0}
+.stamp--struck{animation:strike 200ms cubic-bezier(.2,.9,.25,1) forwards}
+@keyframes strike{
+  0%  {opacity:0;transform:rotate(-4deg) scale(1.22)}
+  70% {opacity:1;transform:rotate(-4deg) scale(.985)}
+  100%{opacity:1;transform:rotate(-4deg) scale(1)}
+}
+.stamp--blue.stamp--struck{animation-name:strike-blue}
+@keyframes strike-blue{
+  0%{opacity:0;transform:rotate(-6deg) scale(1.22)}70%{opacity:1;transform:rotate(-6deg) scale(.985)}100%{opacity:1;transform:rotate(-6deg) scale(1)}
+}
+.stamp--light.stamp--struck{animation-name:strike-light}
+@keyframes strike-light{
+  0%{opacity:0;transform:rotate(-3deg) scale(1.22)}70%{opacity:1;transform:rotate(-3deg) scale(.985)}100%{opacity:1;transform:rotate(-3deg) scale(1)}
+}
+.stamp--outline.stamp--struck{animation-name:strike-outline}
+@keyframes strike-outline{
+  0%{opacity:0;transform:rotate(-5deg) scale(1.22)}70%{opacity:.85;transform:rotate(-5deg) scale(.985)}100%{opacity:.85;transform:rotate(-5deg) scale(1)}
+}
+
+/* --------------------------------------------------------------- footer */
+.foot{background:var(--ink-black);color:var(--stock-bond);padding-block:2.5rem}
+.foot__grid{display:grid;gap:2rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+.foot .plate{border-color:rgba(244,244,240,.5);color:var(--stock-bond);background:transparent;margin-bottom:1rem}
+.routing li{display:flex;align-items:center;gap:.6rem;font-size:.875rem;padding:.22rem 0}
+.routing a{color:var(--stock-bond)}
+.chip{width:.85rem;height:.85rem;border:1px solid rgba(244,244,240,.6);flex:none}
+.chip--bond{background:var(--stock-bond)}
+.chip--canary{background:var(--stock-canary)}
+.chip--pink{background:var(--stock-pink)}
+
+/* --------------------------------------------------------------- focus */
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--ink-red);outline-offset:2px;
+}
+.part--blue a:focus-visible,.part--deep a:focus-visible,
+.masthead a:focus-visible,.foot a:focus-visible{
+  outline-color:var(--stock-canary);
+}
+
+/* --------------------------------------------------------------- responsive */
+@media (max-width:1080px){
+  .split,.about{grid-template-columns:1fr}
+  .split__caption{position:static}
+  .split__caption .heading{max-width:22ch}
+  .crew{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .crew__member:nth-child(2n){border-right:0}
+  .crew__member:nth-child(-n+2){border-bottom:var(--rule)}
+  .remarks{grid-template-columns:1fr}
+  .remark{border-right:0;border-bottom:1px solid var(--ink-black)}
+  .remark:last-child{border-bottom:0}
+}
+
+@media (max-width:860px){
+  .scope,.order{grid-template-columns:1fr}
+  .file{grid-template-columns:minmax(0,1fr);gap:.5rem}
+  .file .plate{grid-row:auto;justify-self:start}
+  .file__sector,.file--open .fineprint{grid-column:1}
+  .file__status{grid-column:1;grid-row:auto;justify-self:start;text-align:left;margin-top:.35rem}
+  .file__status .stamp{transform-origin:left center}
+  .foot__grid{grid-template-columns:1fr}
+}
+
+@media (max-width:560px){
+  .crew{grid-template-columns:1fr}
+  .crew__member{border-right:0;border-bottom:var(--rule)}
+  .crew__member:last-child{border-bottom:0}
+  .line{grid-template-columns:1.9rem minmax(0,1fr);gap:0 .8rem}
+  .line__no{display:none}
+  .order__fields li{grid-template-columns:1fr;gap:.5rem}
+  .masthead__name span{display:none}
+  .display{font-size:clamp(1.85rem,7.4vw,2.4rem)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .stamp--pending{opacity:1}
+  .stamp--outline.stamp--pending{opacity:.85}
+}
