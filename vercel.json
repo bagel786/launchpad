@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "https://launchpadconsulting.net/:path*",
+      "destination": "https://launchpadconsulting.xyz/:path*",
+      "permanent": true
+    }
+  ]
+}

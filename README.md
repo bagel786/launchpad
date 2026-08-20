@@ -17,6 +17,20 @@ DESIGN.md       the visual system and its rules
 
 Nothing is fetched from the internet at runtime. Fonts are local. The only external links are the four client sites and LinkedIn.
 
+## Canonical domain and redirects
+
+The official domain is `https://launchpadconsulting.xyz/`. The `.net` domain should
+301-redirect every path to the matching `.xyz` path. `_redirects` contains the rule
+for Netlify. GitHub Pages does not execute redirect files, so configure the same
+redirect at the DNS/hosting provider if `.net` is also attached there. Keep the
+`.xyz` domain attached to the site and keep `CNAME` set to `launchpadconsulting.xyz`.
+
+After deployment, verify both `https://launchpadconsulting.xyz/` and
+`https://launchpadconsulting.xyz/team/` return `200`, then verify a non-canonical
+URL such as `https://launchpadconsulting.net/team/` returns `301` to the `.xyz`
+version. Add the canonical `.xyz` URL to Google Search Console as a Domain property,
+submit `/sitemap.xml`, and request indexing for `/` and `/team/` in URL Inspection.
+
 ## Deploying
 
 Pick one. All free.

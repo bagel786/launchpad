@@ -14,11 +14,11 @@ Secondary: the clients themselves once engaged, returning to the site for contac
 
 ## Product Purpose
 
-LaunchPad Consulting delivers practical marketing, branding, and web consulting to small businesses and organizations at prices they can actually pay. Success for the site is a single action: a qualified owner emails with their business name, details, and the services they want.
+LaunchPad Consulting delivers student-led software, website, dashboard, and business consulting to small businesses and organizations at prices they can actually pay. Success for the site is a single action: a qualified owner emails with their business name, details, and the services they want.
 
 ## Positioning
 
-A four-person student-founded firm that does the work, not just the advice. Engagements produce a written audit/report, a slide deck walked through live on Zoom, ready-to-use templates and assets, and — where the client wants it — ongoing execution: running the social accounts, building the site. Low cost is a deliberate position, not a discount: the firm exists to help early-stage and small operations develop.
+A four-person student-founded firm that does the work, not just the advice. Engagements produce a working website, dashboard, software tool, or business plan, alongside written recommendations, ready-to-use templates and assets, and — where the client wants it — ongoing execution. Low cost is a deliberate position, not a discount: the firm exists to help early-stage and small operations develop.
 
 The honest differentiator is price-to-delivery ratio plus a real client roster, not experience. Future work must not claim seniority, headcount, or years in business the firm does not have.
 
@@ -30,14 +30,14 @@ Delivery happens over Zoom and shared documents. Ongoing-execution clients are m
 
 ## Capabilities and Constraints
 
-Six services offered:
+Six service areas offered:
 
-1. **Social Media Audits** — review current presence, recommend actions to increase engagement and reach.
-2. **Brand Refresh** — logos, color schemes, messaging; a modern, cohesive identity.
-3. **Customer Insights & Market Research** — analyze customer behavior and preferences to sharpen marketing.
-4. **Website Tune-Ups** — design, UX, and content optimization to attract and retain visitors.
-5. **Marketing Strategy Consulting** — tailored plans with clear, achievable goals.
-6. **Content Recommendations & Templates** — content strategies, post ideas, branding templates.
+1. **Custom Software** — small tools and workflows that remove repetitive work.
+2. **Websites** — clear, fast websites that explain the business and guide visitors.
+3. **Dashboards** — simple views of the information teams need to make decisions.
+4. **Business Solutions** — research, process design, and practical recommendations for a specific problem.
+5. **Strategy Consulting** — tailored plans with clear, achievable goals.
+6. **Marketing and Content** — brand, social, and content guidance with reusable templates.
 
 Constraints:
 
