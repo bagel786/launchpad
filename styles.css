@@ -278,6 +278,8 @@ h1,h2,h3,p{margin:0}
 .crew__plate{padding:1.1rem 1.15rem 1.35rem;flex:1}
 .crew__plate .plate{border:0;padding:0;background:transparent;margin-bottom:.55rem}
 .crew__plate h3{font-family:var(--display);font-size:1.0625rem;text-transform:uppercase;line-height:1.15}
+.crew__plate h3 a{text-decoration-thickness:1px;text-underline-offset:.18em}
+.crew__plate h3 a:hover,.crew__plate h3 a:focus-visible{color:var(--ink-blue-deep)}
 .crew__plate p{margin-top:.6rem;font-size:.875rem;line-height:1.55}
 
 .about{
